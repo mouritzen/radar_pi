@@ -6,3 +6,5 @@ install_manifest.txt
 rel-*/
 example/
 build/
+.DS_Store
+.vscode/

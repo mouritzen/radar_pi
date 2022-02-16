@@ -164,6 +164,11 @@ set(SRC
   include/raymarine/RME120type.h
   include/raymarine/RaymarineCommon.h
   include/raymarine/RaymarineLocate.h
+  include/furuno/FurunoDRSControl.h
+  include/furuno/FurunoDRSControlSet.h
+  include/furuno/FurunoDRSControlsDialog.h
+  include/furuno/FurunoDRSReceive.h
+  include/furuno/furunodrstype.h
 
   src/ControlsDialog.cpp
   src/GuardZone.cpp
@@ -205,6 +210,9 @@ set(SRC
   src/raymarine/RME120ControlsDialog.cpp
   src/raymarine/RME120Receive.cpp
   src/raymarine/RaymarineLocate.cpp
+  src/furuno/FurunoDRSControl.cpp
+  src/furuno/FurunoDRSControlsDialog.cpp
+  src/furuno/FurunoDRSReceive.cpp
 
 )
 
@@ -224,6 +232,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include/garminhd)
 include_directories(${PROJECT_SOURCE_DIR}/include/garminxhd)
 include_directories(${PROJECT_SOURCE_DIR}/include/navico)
 include_directories(${PROJECT_SOURCE_DIR}/include/raymarine)
+include_directories(${PROJECT_SOURCE_DIR}/include/furuno)
 
 add_subdirectory("libs/api-16")
 target_link_libraries(${CMAKE_PROJECT_NAME} ocpn::api)

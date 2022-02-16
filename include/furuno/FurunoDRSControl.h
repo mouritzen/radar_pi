@@ -29,77 +29,39 @@
  ***************************************************************************
  */
 
-#if !defined(DEFINE_RADAR)
-#ifndef _RADARTYPE_H_
-#define _RADARTYPE_H_
+#ifndef _FURUNO_DRS_CONTROL_H_
+#define _FURUNO_DRS_CONTROL_H_
 
 #include "RadarInfo.h"
-#include "emulator/EmulatorControl.h"
-#include "emulator/EmulatorControlsDialog.h"
-#include "emulator/EmulatorReceive.h"
-#include "garminhd/GarminHDControl.h"
-#include "garminhd/GarminHDControlsDialog.h"
-#include "garminhd/GarminHDReceive.h"
-#include "garminxhd/GarminxHDControl.h"
-#include "garminxhd/GarminxHDControlsDialog.h"
-#include "garminxhd/GarminxHDReceive.h"
-#include "navico/NavicoControl.h"
-#include "navico/NavicoControlsDialog.h"
-#include "navico/NavicoReceive.h"
 #include "pi_common.h"
-#include "raymarine/RME120Control.h"
-#include "raymarine/RME120ControlsDialog.h"
-#include "raymarine/RME120Receive.h"
-#include "furuno/FurunoDRSControl.h"
-#include "furuno/FurunoDRSControlsDialog.h"
-#include "furuno/FurunoDRSReceive.h"
+#include "socketutil.h"
 
-#endif /* _RADARTYPE_H_ */
+PLUGIN_BEGIN_NAMESPACE
 
-#define DEFINE_RADAR(t, x, s, l, a, b, c, d)
-#define INITIALIZE_RADAR
-#endif
+class FurunoDRSControl : public RadarControl {
+ public:
+  FurunoDRSControl(NetworkAddress sendMultiCastAddress);
+  ~FurunoDRSControl();
 
-#if !defined(DEFINE_RANGE_METRIC)
-#define DEFINE_RANGE_METRIC(t, x)
-#endif
+  bool Init(radar_pi *pi, RadarInfo *ri, NetworkAddress &interfaceAddress, NetworkAddress &radarAddress);
+  void RadarTxOff();
+  void RadarTxOn();
+  bool RadarStayAlive();
+  bool SetRange(int meters);
 
-#if !defined(DEFINE_RANGE_MIXED)
-#define DEFINE_RANGE_MIXED(t, x)
-#endif
+  bool SetControlValue(ControlType controlType, RadarControlItem &item, RadarControlButton *button);
 
-#if !defined(DEFINE_RANGE_NAUTIC)
-#define DEFINE_RANGE_NAUTIC(t, x)
-#endif
+ private:
+  void logBinaryData(const wxString &what, const void *data, int size);
+  bool TransmitCmd(const void *msg, int size);
 
-#ifndef SPOKES_MAX
-#define SPOKES_MAX 0
-#endif
+  radar_pi *m_pi;
+  RadarInfo *m_ri;
+  struct sockaddr_in m_addr;
+  SOCKET m_radar_socket;
+  wxString m_name;
+};
 
-#ifndef SPOKE_LEN_MAX
-#define SPOKE_LEN_MAX 0
-#endif
+PLUGIN_END_NAMESPACE
 
-#ifndef RO_SINGLE
-#define RO_SINGLE (0)
-#define RO_PRIMARY (1)
-#define RO_SECONDARY (2)
-#endif
-
-#include "emulator/emulatortype.h"
-#include "garminhd/garminhdtype.h"
-#include "garminxhd/garminxhdtype.h"
-#include "navico/br24type.h"
-#include "navico/br3gtype.h"
-#include "navico/br4gatype.h"
-#include "navico/br4gbtype.h"
-#include "navico/haloatype.h"
-#include "navico/halobtype.h"
-#include "raymarine/RME120type.h"
-#include "furuno/furunodrstype.h"
-
-#undef DEFINE_RADAR  // Prepare for next inclusion
-#undef INITIALIZE_RADAR
-#undef DEFINE_RANGE_METRIC
-#undef DEFINE_RANGE_MIXED
-#undef DEFINE_RANGE_NAUTIC
+#endif /* _FURUNO_DRS_CONTROL_H_ */
